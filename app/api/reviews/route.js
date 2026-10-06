@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { BACKEND_URL } from "../../../lib/config";
+import { BACKEND_URL } from "../../lib/config";
 async function getAccessToken() {
   const cookieStore = await cookies();
   return cookieStore.get("access_token")?.value;

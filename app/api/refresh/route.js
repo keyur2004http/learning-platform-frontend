@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { BACKEND_URL } from "../../../lib/config";
+import { BACKEND_URL } from "../../lib/config";
 export async function POST() {
   const cookieStore = await cookies();
 
