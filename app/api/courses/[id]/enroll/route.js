@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { authenticatedFetch } from "../../../lib/auth";
+import { authenticatedFetch } from "../../../../lib/auth";
 import {BACKEND_URL} from "../../../../lib/config"
 export async function POST(request, { params }) {
   const { id } = await params;
