@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
-import { BACKEND_URL } from "../lib/config";
+import { BACKEND_URL } from "./config";
+
 export async function authenticatedFetch(url, options = {}) {
   const cookieStore = await cookies();
 
@@ -11,6 +12,7 @@ export async function authenticatedFetch(url, options = {}) {
       response: null,
       accessToken: null,
       refreshed: false,
+      sessionExpired: true,
     };
   }
 
@@ -28,6 +30,7 @@ export async function authenticatedFetch(url, options = {}) {
       response,
       accessToken,
       refreshed: false,
+      sessionExpired: false,
     };
   }
 
@@ -47,14 +50,14 @@ export async function authenticatedFetch(url, options = {}) {
 
   if (!refreshResponse.ok) {
     return {
-      response,
+      response: null,
       accessToken: null,
       refreshed: false,
+      sessionExpired: true,
     };
   }
 
   const refreshData = await refreshResponse.json();
-
   accessToken = refreshData.access;
 
   response = await fetch(url, {
@@ -70,5 +73,20 @@ export async function authenticatedFetch(url, options = {}) {
     response,
     accessToken,
     refreshed: true,
+    sessionExpired: false,
   };
+}
+export function sessionExpiredResponse() {
+  const response = NextResponse.json(
+    {
+      detail: "Your session has expired. Please log in again.",
+      sessionExpired: true,
+    },
+    { status: 401 }
+  );
+
+  response.cookies.delete("access_token");
+  response.cookies.delete("refresh_token");
+
+  return response;
 }
